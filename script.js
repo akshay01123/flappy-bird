@@ -29,6 +29,8 @@ let pipes = [];
 let pipeWidth = 50;
 let gap = 150;
 
+let score = 0; // player points
+
 function createPipe(){
     let topHeight = Math.random() * (canvas.height - gap - 100) + 20;
 
@@ -55,6 +57,11 @@ function update(){
 
     pipes.forEach(pipe => {
         pipe.x -= 2;
+        // check if bird passed the pipe for scoring
+        if (!pipe.passed && pipe.x + pipeWidth < bird.x) {
+            pipe.passed = true;
+            score++;
+        }
     });
 
     if(pipes.length == 0 || pipes[pipes.length-1].x < 250){
@@ -96,6 +103,10 @@ function draw(){
         ctx.fillRect(pipe.x,pipe.top + gap,pipeWidth,pipe.bottom);
     });
 
+    // draw score
+    ctx.fillStyle = "black";
+    ctx.font = "24px Arial";
+    ctx.fillText("Score: " + score, 10, 30);
 }
 
 function gameLoop(){
