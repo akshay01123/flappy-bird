@@ -5,20 +5,24 @@ const ctx = canvas.getContext("2d");
 const birdImg = new Image();
 birdImg.src = "bird.png"; // put a bird.png image in the same folder
 
+// desired size for the bird on canvas; keeps it small relative to pipes
+const BIRD_WIDTH = 40;
+const BIRD_HEIGHT = 30;
+
 let bird = {
     x: 80,
-    y: 150,
-    width: 20,   // will be overridden when image loads
-    height: 20,  // will be overridden when image loads
+    y: canvas.height / 2,          // start in middle of screen
+    width: BIRD_WIDTH,
+    height: BIRD_HEIGHT,
     gravity: 0.6,
     lift: -10,
     velocity: 0
 };
 
-// once the image is ready, update our bird dimensions
+// no need to resize based on the actual image; we will draw scaled
 birdImg.onload = function() {
-    bird.width = birdImg.width;
-    bird.height = birdImg.height;
+    // you could adjust BIRD_WIDTH/BIRD_HEIGHT here if you want to keep aspect ratio,
+    // but for now we just use the constants above.
 };
 
 let pipes = [];
@@ -76,7 +80,7 @@ function draw(){
 
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    // draw bird image instead of simple rectangle
+    // draw bird image (scaled) instead of simple rectangle
     if (birdImg.complete) {
         ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
     } else {
