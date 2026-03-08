@@ -1,14 +1,24 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+// load a bird icon to use for the player
+const birdImg = new Image();
+birdImg.src = "bird.png"; // put a bird.png image in the same folder
+
 let bird = {
     x: 80,
     y: 150,
-    width: 20,
-    height: 20,
+    width: 20,   // will be overridden when image loads
+    height: 20,  // will be overridden when image loads
     gravity: 0.6,
     lift: -10,
     velocity: 0
+};
+
+// once the image is ready, update our bird dimensions
+birdImg.onload = function() {
+    bird.width = birdImg.width;
+    bird.height = birdImg.height;
 };
 
 let pipes = [];
@@ -66,8 +76,14 @@ function draw(){
 
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
-    ctx.fillStyle = "yellow";
-    ctx.fillRect(bird.x,bird.y,bird.width,bird.height);
+    // draw bird image instead of simple rectangle
+    if (birdImg.complete) {
+        ctx.drawImage(birdImg, bird.x, bird.y, bird.width, bird.height);
+    } else {
+        // fallback until image loads
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(bird.x,bird.y,bird.width,bird.height);
+    }
 
     ctx.fillStyle = "green";
 
